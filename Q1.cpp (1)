@@ -1,0 +1,442 @@
+//Program to perform SET operations.
+
+#include<iostream>
+#include<conio.h>
+#include<cmath>
+#include <stdlib.h>
+using namespace std;
+
+
+
+
+void menu()
+{
+	cout<<"1 -> Cardinality"<<endl;
+	cout<<"2 -> Ismember"<<endl;
+	cout<<"3 -> Union"<<endl;
+	cout<<"4 -> Intersection"<<endl;
+	cout<<"5 -> Subset Check"<<endl;
+	cout<<"6 -> Set difference"<<endl;
+	cout<<"7 -> Cartisian Product"<<endl;
+	cout<<"8 -> Compliment"<<endl;
+	cout<<"9 -> Power set"<<endl;
+	cout<<"10 -> Symmetric Difference"<<endl;
+	cout<<"11 -> Exit"<<endl;
+}
+
+
+class SET{
+	int *arr;
+	int size;
+	
+public:
+	void Setsize()
+	{
+		cout<<"Enter size of the array : ";
+		cin>>size;
+		arr = new int[size];
+		
+	}	
+	void input()
+	{
+		cout<<"Enter elements of the array : "<<endl;
+		for(int i=0; i<size; i++){
+				cout<<"arr["<<i<<"] : ";
+				cin>>arr[i];
+			}
+		unique();
+	}
+	
+	void cardinality()
+	{
+		cout<<size<<endl<<endl; 
+		
+		
+	}
+	
+	void output()
+	{
+		cout<<"Entered set is : ";
+		cout<<"{";
+		for(int i=0 ; i<size ; i++)
+		{
+			
+			cout<<arr[i];
+			if(i<size-1){
+				cout<<",";
+			}
+		
+		}
+		cout<<"}"<<endl<<endl; 
+	}
+	
+	
+	
+		void output1()
+	{
+		cout<<"{";
+		for(int i=0 ; i<size ; i++)
+		{
+			cout<<arr[i];
+			if(i<size-1){
+				cout<<",";
+			}
+		}
+		cout<<"}"<<endl; 
+	}
+	
+	
+	void unique()
+	{
+		for(int i=0 ; i<size ; i++)
+		{
+			for( int j=i+1 ; j<size  ; j++)
+			{
+				if(arr[i]==arr[j])      
+				{
+					for(int k=j ; k<size ; k++)
+						arr[k]=arr[k+1];
+						size--;
+					j--;
+				}
+			}
+		}
+	}
+	void ismember()
+	{
+		int element , flag=0;
+		cout<<"Enter element to be checked : ";
+		cin>>element;
+		
+		for(int i=0 ; i<size ; i++)
+		{
+			if(arr[i]==element)
+			{
+				cout<<element<<" is a member of the set"<<endl<<endl;
+				flag=1;
+				break;
+			}
+		}
+		
+		if(flag==0){
+			cout<<element<<" is not a member of the set"<<endl<<endl;
+		}
+	}
+	
+SET intersection(SET a,SET b){
+    SET D;
+    D.size=min(a.size,b.size);
+    D.arr=new int [D.size];
+    int k=0;
+    for (int i =0;i<a.size;i++){
+        for (int j=0;j<b.size;j++){
+            if (a.arr[i]==b.arr[j]){
+                D.arr[k++]=a.arr[i];
+                break;
+            }
+        }
+    }
+    D.size=k;
+    D.unique();
+    return D;
+  }
+		
+	
+	SET Setunion (SET a)
+	{
+		SET c;
+		c.size = size + a.size;
+		c.arr = new int[c.size];
+		for (int i=0; i<size ; i++)
+		c.arr[i]=arr[i];
+		for (int i=0 ; i<a.size ; i++)
+		c.arr[i + size] = a.arr[i]; 
+		unique();
+		return c;
+	}
+	
+	bool Subset(SET S)
+	{
+		int flag;
+		for(int i = 0 ; i<size ; i++)
+		{
+			flag = 0;
+			for(int j = 0 ; j < S.size ; j++)
+			{
+				if(arr[i] == S.arr[j])
+				{
+					flag = 1;
+					break;}
+				if(flag == 0)
+				return 0;
+				}
+				return 1;
+			}
+		}
+	
+	
+	SET Setdiff(SET A)
+	{
+		SET obj;
+			obj.size = size;
+			obj.arr = new int[size];
+			for(int i = 0 ; i < size ; i++)
+				obj.arr[i] = arr[i];
+			for(int i = 0 ; i < obj.size ; i++)
+			{
+				for(int j = 0 ; j < A.size ; j++)
+				{
+					if(obj.arr[i] == A.arr[j])
+					
+					{
+						for(int k = i ; k < obj.size ; k++)
+						obj.arr[k] = obj.arr[k+1];
+						--obj.size;
+						j--;
+					}
+				}
+			}
+			return obj;
+	}
+	
+	
+	
+	void cartprod(SET a, SET b){
+     
+     for (int i=0;i<a.size;i++){
+         for (int j=0;j<b.size;j++)
+         cout<<"{"<<a.arr[i]<<","<<b.arr[j]<<"}"<<",";
+     }   cout<<endl;
+ }
+ 
+ 
+ void complement(SET a){
+     SET obj;
+     obj.size=size;
+     obj.arr=new int[size];
+     for (int i=0;i<size;i++)
+     obj.arr[i]=arr[i];
+     for (int i=0;i<obj.size;i++){
+         for (int j=0;j<a.size;j++){
+             if (obj.arr[i]==a.arr[j]){
+                 for (int k=i;k<obj.size-1;k++){
+                 obj.arr[k]=obj.arr[k+1];
+                }
+             obj.size--;
+             i--;
+             break;}
+         }
+     }
+    cout<<"{";
+    for(int i=0;i<obj.size;i++){
+        cout<<obj.arr[i];
+        if(i<(obj.size)-1){
+				cout<<",";
+			}
+        
+    }
+    cout<<"}"<<endl;
+ }
+ 
+ void PowerSet(SET A){
+		int set_size =A.size;
+		int size;
+		size=pow(2, set_size);
+		int c, j;
+		cout<<"The Power set is: "<<endl<<"[";
+ 
+    for (c = 0; c < size; c++) {
+    	cout << "{";
+        for (j = 0; j < set_size; j++) {
+            if (c & (1 << j)){	
+                cout <<A.arr[j];
+                cout<<",";
+            }
+            
+        }
+        cout << "}"<<endl;  
+
+    }
+	cout<<"]"<<endl<<endl;
+	}
+	
+	
+
+	
+		SET sym_diff(SET A){
+			SET U,D,I;
+			U = Setunion(A);
+			I = U.intersection(U,A);
+			D = U.Setdiff(I);
+			return D;
+		}
+	
+	
+	
+	
+	
+};
+
+int main()
+{
+	
+	
+	SET S , S1 , C , c , U, D;
+	bool flag1 = 0;
+	int choice;
+	
+	
+	cout<<"SET S  "<<endl;
+	S.Setsize();
+	S.input();
+	S.output();
+	
+	do{
+	
+	
+	menu();
+	
+	
+	cout << "\nEnter your choice : ";
+    cin>>choice;
+    cout << "Your choice is : " << choice << endl<<endl;
+    
+    
+    switch (choice) {
+    case 1: {
+
+    	cout<<"Cardinality of Set is : ";
+    	S.cardinality();
+
+        break;
+    }
+    case 2: {
+
+    	cout<<"Set 1"<<endl<<endl;
+    	S.ismember();
+    	break;
+       	
+    }
+    case 3: {
+    cout<<"SET S1 "<<endl;
+    S1.Setsize();
+	S1.input();
+	S1.unique();
+	S1.output();
+        C = S.Setunion(S1);
+		C.unique();
+		cout<<"Union of the two sets = ";
+		C.output1();
+		cout<<endl;
+        break;
+    }
+    case 4: {
+    cout<<"SET S1 "<<endl;
+    S1.Setsize();
+	S1.input();
+	S1.unique();
+	S1.output();
+         C = S.intersection(S,S1);
+	     C.unique();
+	    cout<<"Intersection of S and S1 = ";
+	     C.output1();
+	     cout<<endl;
+        break;
+    }
+    case 5:{
+    cout<<"SET S1 "<<endl;
+    S1.Setsize();
+	S1.input();
+	S1.unique();
+	S1.output();
+    		flag1 = S.Subset(S1);
+    		if(flag1)
+    		cout<<"S2 is a subset of S1"<<endl<<endl;
+    		else
+    		cout<<"Not a subset"<<endl<<endl;
+		break;
+	}
+	case 6:{
+	cout<<"SET S1 "<<endl;
+	S1.Setsize();
+	S1.input();
+	S1.unique();
+	S1.output();
+	cout<<"S - S1 : ";
+		C = S.Setdiff(S1);
+		C.unique();
+		C.output1();
+		cout<<"\nS1 - S : ";
+		C = S1.Setdiff(S);
+		C.unique();
+		C.output1();
+		cout<<endl;
+		break;
+	}
+	
+	case 7:{
+	cout<<"SET S1 "<<endl;
+	S1.Setsize();
+	S1.input();
+	S1.unique();
+	S1.output();
+	cout<<"S x S1 : ";
+	S.cartprod(S,S1);
+	cout<<"S1 x S : ";
+	S.cartprod(S1,S);
+	cout<<endl;
+	break;
+	}
+	
+	case 8:{
+		cout<<"SET S1 "<<endl;
+		U.Setsize();
+		U.input();
+		U.unique();
+		U.output();
+		cout<<"Complement of S : ";
+		U.complement(S);
+		cout<<"Complement of S1 : ";
+		S.complement(U);
+		break;
+	
+	}
+   
+   case 9:{
+
+   	S.PowerSet(S);
+	break;
+   }
+   
+   
+   case 10:{
+   	cout<<"SET S1 "<<endl;
+   	S1.Setsize();
+	S1.input();
+	S1.unique();
+	S1.output();
+		C = S.sym_diff(S1);
+		C.unique();
+		cout<<"Symmetric difference of the two sets = ";
+		C.output1();
+		cout<<endl;
+   	
+	break;
+   }
+   
+   case 11:{
+   	cout<<"Exiting the program ";
+   	exit(100);
+	break;
+   }
+    default:{
+        cout<<"Wrong Input\n";
+    }
+    
+}
+} while(choice != 11);
+	return 0;
+	
+
+	
+}

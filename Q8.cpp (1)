@@ -1,0 +1,82 @@
+//Program to accept a directed graph G and compute the in-degree and out-degree of each vertex.
+
+#include <iostream>
+using namespace std;
+
+class DGraph{
+	int ord;
+	int **mat;
+	
+	public:
+		DGraph(){
+			ord = 0;
+		}
+		
+		void input(){
+			do{
+				cout<<"Enter number of vertices in directed graph : ";
+				cin>>ord;
+				if(ord<1){
+					cout<<"Error : number of vertices can't be less than 1.\n\n";
+				}
+			}while(ord<1);
+			
+			mat = new int*[ord];
+			for(int i=0; i<ord; i++){
+				mat[i]=new int[ord];
+			}
+			
+			cout<<"Enter the elements of adjacency matrix of directed graph.\n";
+			for(int i=0; i<ord; i++){
+				for(int j=0; j<ord; j++){
+					cout<<"["<<i<<","<<j<<"] : ";
+					cin>>mat[i][j];
+				}
+			}
+			cout<<endl;
+			return;
+		}
+		
+		void display(){
+			cout<<"Adjacency matrix of directed graph.\n";
+			for(int i=0; i<ord; i++){
+				for(int j=0; j<ord; j++){
+					cout<<mat[i][j]<<" ";
+				}
+				cout<<endl;
+			}
+			cout<<endl;
+			return;
+		}
+		
+		void dispDeg(){
+			cout<<"Vertex\tIn degree  Out degree\n";
+			for(int i=0; i<ord; i++){
+				int inDeg=0,outDeg=0;
+				for(int j=0; j<ord; j++){
+					if(mat[j][i]!=0){
+						inDeg++;
+					}if(mat[i][j]!=0){
+						outDeg++;
+						
+					}
+				}
+				cout<<"  "<<i<<"\t    "<<inDeg<<"\t\t"<<outDeg<<endl;
+			}
+		}
+		
+		~DGraph(){
+			for(int i=0; i<ord; i++)
+				delete mat[i];
+			delete mat;
+		}
+	
+};
+
+int main(){
+	DGraph G;
+	G.input();
+	G.display();
+	G.dispDeg();
+	return 0;
+}

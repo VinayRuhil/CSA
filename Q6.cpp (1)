@@ -1,0 +1,80 @@
+//Program to check if a given graph is a complete graph. Represent the graph using the Adjacency Matrix representation.
+
+#include <iostream>
+using namespace std;
+
+class Graph{
+	int ord;
+	int **mat;
+	
+	public:
+		Graph(){
+			ord = 0;
+		}
+		
+		void input(){
+			do{
+				cout<<"Enter number of vertices in graph : ";
+				cin>>ord;
+				if(ord<1){
+					cout<<"Error : number of vertices can't be less than 1.\n\n";
+				}
+			}while(ord<1);
+			
+			mat = new int*[ord];
+			for(int i=0; i<ord; i++){
+				mat[i]=new int[ord];
+			}
+			
+			cout<<"Enter the elements of adjacency matrix of undirected graph.\n";
+			for(int i=0; i<ord; i++){
+				for(int j=0; j<ord; j++){
+					cout<<"["<<i<<","<<j<<"] : ";
+					cin>>mat[i][j];
+				}
+			}
+			cout<<endl;
+			return;
+		}
+		
+		void display(){
+			cout<<"Adjacency matrix of undirected graph.\n";
+			for(int i=0; i<ord; i++){
+				for(int j=0; j<ord; j++){
+					cout<<mat[i][j]<<" ";
+				}
+				cout<<endl;
+			}
+			cout<<endl;
+			return;
+		}
+		
+		bool isComp(){
+			for(int i=0; i<ord; i++){
+				for(int j=0; j<ord; j++){
+					if((i==j&&mat[i][j]!=0)||(i!=j&&mat[i][j]==0)){
+						return 0;
+					}
+				}
+			}
+			return 1;
+		}
+		
+		~Graph(){
+			for(int i=0; i<ord; i++)
+				delete mat[i];
+			delete mat;
+		}
+};
+
+int main(){
+	Graph G;
+	G.input();
+	G.display();
+	if(G.isComp()){
+		cout<<"It is a complete graph.";
+	}else{
+		cout<<"It is not a complete graph.";
+	}
+	return 0;
+}
